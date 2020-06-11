@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    container_name: chat_db
+    image: "postgres"
+    env_file:
+      - .env
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+
+  api:
+    container_name: chat_api
+    build: .
+    env_file: .env
+    command: ["sh", "./start.sh"]
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/api
+    depends_on:
+      - db
+
+volumes:
+  database-data: {}
+
+
+
