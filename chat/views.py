@@ -1,60 +1,40 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-# Django Build in User Model
-from django.contrib.auth.models import User
-from django.http.response import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
-# Our Message model
-from chat.models import Message
-from chat.serializers import MessageSerializer, UserSerializer  # Our Serializer Classes
-# Users View
-# Decorator to make the view csrf excempt.
-@csrf_exempt
-def user_list(request, pk=None):
-    """
-    List all required messages, or create a new message.
-    """
-    if request.method == 'GET':
-        # If PrimaryKey (id) of the user is specified in the url
-        if pk:
-            # Select only that particular user
-            users = User.objects.filter(id=pk)
-        else:
-            users = User.objects.all()                             # Else get all user list
-        serializer = UserSerializer(
-            users, many=True, context={'request': request})
-        # Return serialized data
-        return JsonResponse(serializer.data, safe=False)
-    elif request.method == 'POST':
-        # On POST, parse the request object to obtain the data in json
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(data=data)        # Seraialize the data
-        if serializer.is_valid():
-            serializer.save()                                            # Save it if valid
-            # Return back the data on success
-            return JsonResponse(serializer.data, status=201)
-        # Return back the errors  if not valid
-        return JsonResponse(serializer.errors, status=400)
+from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.decorators import permission_classes, action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.status import HTTP_404_NOT_FOUND
+from .models import Message, User
+from .serializers import MessageSerializer, UserSerializer
+from django.db.models import Q
 
 
-@csrf_exempt
-def message_list(request, sender=None, receiver=None):
-    """
-    List all required messages, or create a new message.
-    """
-    if request.method == 'GET':
-        messages = Message.objects.filter(
-            sender_id=sender, receiver_id=receiver)
-        serializer = MessageSerializer(
-            messages, many=True, context={'request': request})
-        return JsonResponse(serializer.data, safe=False)
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = MessageSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+
+@permission_classes([IsAuthenticated])
+
+class MessageViewSet(viewsets.ModelViewSet):
+    """API endpoint that allows firmwares to be created, viewed or edited."""
+
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+    lookup_url_kwarg = None
+
+
+    def list(self, request, **kwargs):
+        profile = request.user
+        messages_received = Message.objects.filter(Q(receiver=profile.id)).order_by('-id')
+        messages_sent = Message.objects.filter(Q(sender=profile.id)).order_by('-id')
+        queryset = messages_received | messages_sent
+
+        if 'chat_with' in request.GET:
+            chat_with = request.GET['chat_with']
+            messages_sent = queryset.filter(
+                Q(sender=chat_with)).order_by('-id')
+            messages_received = queryset.filter(
+                Q(receiver=chat_with)).order_by('-id')
+            queryset = messages_received | messages_sent
+        
+        serializer = MessageSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)

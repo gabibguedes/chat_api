@@ -4,6 +4,7 @@
 ```
 docker-compose up
 ```
+Após o comando a api estará rodando em `localhost:8000`
 
 ## Crie um super usuário:
 Após subir o docker, entre no container da api com o comando:
@@ -34,15 +35,17 @@ Dependendo das alterações feitas, é possivel que ao fazer as migrações tenh
 docker-compose down --volumes
 ```
 
+## Endpoints
+### Messages
+`localhost:8000/messages`: Retorna todas as mensagens relacionadas ao usuário logado.
+
+`localhost:8000/messages/?chat_with=<ID>`: Retorna as mensagens do usuário logado com o usuário do `ID`especificado.
+
+
+
 ## Problemas pendentes:
 - O sistema de chat foi ainda está limitado, as respostas da api precisam ser melhoradas.
 
-- O tutorial não utilizava o sistema de respostas do django rest. Precisa, então, adaptar para utiliza-lo.
-
 - É necessário fazer os endpoints de login e criação de usuário.
 
-- É necessário restringir a criação de mensagens a usuários logados
-
-## Referencias:
-
-[Tutorial utilizado para fazer o sistema de chat](https://steemit.com/utopian-io/@ajmaln/part-1-creating-a-simple-chat-app-with-djangorestframework)
+- Falta uma url que retorne uma lista de chats que o usuário possui
