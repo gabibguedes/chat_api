@@ -37,15 +37,74 @@ docker-compose down --volumes
 
 ## Endpoints
 ### Messages
-`localhost:8000/messages`: Retorna todas as mensagens relacionadas ao usuário logado.
+É necessário passar o Token no header da requisição para acessar esses endpoint.
 
-`localhost:8000/messages/?chat_with=<ID>`: Retorna as mensagens do usuário logado com o usuário do `ID`especificado.
+* `localhost:8000/messages`: 
+    **GET** - Retorna todas as mensagens relacionadas ao usuário logado.  
+    **POST** - Manda novas mensagens.  
+    ```json
+    {
+        "receiver": "<USERNAME>",
+        "message": "<MENSAGEM>"
+    }
+    ```
+    **receiver**: *username* do usuário destinatário.
+    **message**: Mensagem a ser enviada.
 
+
+* `localhost:8000/messages/<ID>`:
+    **GET** - Retorna a mensagem com o *id* especificado.
+    **DELETE** - Deleta a mensagem.
+
+
+* `localhost:8000/messages/?chat_with=<USERNAME>`: 
+    **GET** - Retorna a lista de mensagens trocadas do usuário logado com o usuário do *username* especificado.
+
+### Users
+* `localhost:8000/api/auth/register/`:
+    **POST** - Faz o registro do usuário, retornando o usuário logado e o token.
+    ```json
+    {
+        "username": "exemplo",
+        "first_name": "Joao",
+        "last_name": "Da Silva",
+        "password": "senha123"
+    }
+    ```
+    **username**: *username* único de escolha do usuário
+    **first_name**: nome do usuário.
+    **last_name**: sobrenome do usuário.
+    **password**: senha de acesso.
+
+
+* `localhost:8000/api/auth/login/`:
+    **POST** - Faz o login do usuário, retornando o usuário logado e o token.
+    ```json
+    {
+        "username": "exemplo",
+        "password": "senha123"
+    }
+    ```
+    **username**: *username* do usuário cadastrado.
+    **password**: senha de acesso.
+
+
+* `localhost:8000/api/auth/logout/`:
+    **POST** - Faz o logout do usuário.
+    - *Obs.:* É necessário passar o Token no header da requisição.
+
+
+* `localhost:8000/api/auth/password_change/`:
+    **POST** - Atualiza a senha do usuário.
+    ```json
+    {
+ 	    "current_password": "senhaantiga123",
+	    "new_password": "novasenha123"
+    }
+    ```
+     - *Obs.:* É necessário passar o Token no header da requisição.
 
 
 ## Problemas pendentes:
-- O sistema de chat foi ainda está limitado, as respostas da api precisam ser melhoradas.
-
-- É necessário fazer os endpoints de login e criação de usuário.
 
 - Falta uma url que retorne uma lista de chats que o usuário possui

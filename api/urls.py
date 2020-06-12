@@ -20,10 +20,12 @@ from django.urls import path, include
 from rest_framework import routers
 from . import views
 from chat.views import MessageViewSet
-
+from users.views import AuthViewSet
 
 router = routers.DefaultRouter()
 router.register(r'messages', MessageViewSet)
+router.register('api/auth', AuthViewSet, basename='auth')
+
 
 
 urlpatterns = [

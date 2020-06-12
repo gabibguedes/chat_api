@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     volumes:
-      - database-data:/var/lib/postgresql/data/
+      - chat_database:/var/lib/postgresql/data/
 
   api:
     container_name: chat_api
@@ -21,7 +21,7 @@ services:
       - db
 
 volumes:
-  database-data: {}
+  chat_database: {}
 
 
 

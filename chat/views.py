@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes, action
 from rest_framework.permissions import IsAuthenticated
@@ -10,8 +10,11 @@ from django.db.models import Q
 
 
 @permission_classes([IsAuthenticated])
-
-class MessageViewSet(viewsets.ModelViewSet):
+class MessageViewSet(mixins.CreateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.DestroyModelMixin,
+                     mixins.ListModelMixin,
+                     viewsets.GenericViewSet):
     """API endpoint that allows firmwares to be created, viewed or edited."""
 
     queryset = Message.objects.all()
@@ -27,10 +30,11 @@ class MessageViewSet(viewsets.ModelViewSet):
 
         if 'chat_with' in request.GET:
             chat_with = request.GET['chat_with']
+            colleague = User.objects.get(username=chat_with)
             messages_sent = queryset.filter(
-                Q(sender=chat_with)).order_by('-timestamp')
+                Q(sender=colleague.id)).order_by('-timestamp')
             messages_received = queryset.filter(
-                Q(receiver=chat_with)).order_by('-timestamp')
+                Q(receiver=colleague.id)).order_by('-timestamp')
             queryset = messages_received | messages_sent
         
         serializer = MessageSerializer(queryset, many=True)
