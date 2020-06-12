@@ -173,3 +173,8 @@ Dependendo das alterações feitas, é possivel que ao fazer as migrações tenh
 docker-compose down --volumes
 ```
 
+## Problemas a serem resolvidos
+
+- Encontrar uma alternativa para o endpoint `chatting_with/`, já que o mesmo é inviável com o crescimento do uso da aplicação. (Talvez estabelecer uma lista de "amigos" para cada usuário? E mostrar essa lista no lugar da lista de usuários que tiveram troca de conversa com o usuário logado) 
+
+- Adicionar paginação?
