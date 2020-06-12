@@ -72,3 +72,9 @@ class AuthViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         if self.action in self.serializer_classes.keys():
             return self.serializer_classes[self.action]
         return super().get_serializer_class()
+
+
+class UsersViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = serializers.ListUsersSerializer
+    queryset = User.objects.all()

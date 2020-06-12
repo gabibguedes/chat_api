@@ -19,17 +19,18 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from . import views
-from chat.views import MessageViewSet
-from users.views import AuthViewSet
+from chat.views import MessageViewSet, UsersImChattingWithViewSet
+from users.views import AuthViewSet, UsersViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'messages', MessageViewSet)
 router.register(r'auth', AuthViewSet, basename='auth')
+router.register(r'users', UsersViewSet, basename='users')
+router.register(r'messages', MessageViewSet, basename='messages')
+router.register(r'chatting_with', UsersImChattingWithViewSet, basename='chats')
 
 
 urlpatterns = [
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('hello_world', views.HelloWorld.as_view()),
 ]

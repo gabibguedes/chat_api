@@ -11,7 +11,11 @@ User = get_user_model()
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=300, required=True)
-    password = serializers.CharField(required=True, write_only=True)
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        required=True,
+        write_only=True
+    )
 
 
 class AuthUserSerializer(serializers.ModelSerializer):
@@ -36,6 +40,10 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     """
     A user serializer for registering the user
     """
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        required=True,
+    )
 
     class Meta:
         model = User
@@ -65,6 +73,13 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_new_password(self, value):
         password_validation.validate_password(value)
         return value
+
+
+class ListUsersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name')
 
 
 class EmptySerializer(serializers.Serializer):

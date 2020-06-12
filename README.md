@@ -14,8 +14,7 @@ http://localhost:8000/
 
 ## Endpoints
 
-### Users
-
+### Autenticação
 #### `/api/auth/register/`:
 
 **POST** - Faz o registro do usuário, retornando o usuário logado e o token.
@@ -74,11 +73,21 @@ http://localhost:8000/
 
 *Obs.:* É necessário passar o `token` no header da requisição.
 
+
+### Users
+
+#### `/api/users/`
+
+**GET** - Retorna lista com todos os usuários cadastrados na aplicação.
+
+*Obs.:* É necessário passar o `token` no header da requisição.
+
+
 ### Messages
 
 *Obs.:* É necessário passar o `token` no header da requisição para acessar todos os *endpoints* de mensagem.
 
-#### `/api/messages`: 
+#### `/api/messages/`: 
 
 **GET** - Retorna todas as mensagens relacionadas ao usuário logado.  
 
@@ -96,7 +105,7 @@ http://localhost:8000/
 * **message**: Mensagem a ser enviada.
 
 
-#### `/api/messages/<ID>`:
+#### `/api/messages/<ID>/`:
 
 **GET** - Retorna a mensagem com o *id* especificado.
 
@@ -106,6 +115,29 @@ http://localhost:8000/
 #### `/api/messages/?chat_with=<USERNAME>`: 
 
 **GET** - Retorna a lista de mensagens trocadas do usuário logado com o usuário do *username* especificado.
+
+
+### Chats
+
+#### `/api/chatting_with/`
+
+**GET** - Retorna lista de todos os usuários dos quais o usuário logado está trocando mensagens.
+
+*Obs.:* É necessário passar o `token` no header da requisição.
+
+## Requisições com token:
+
+Algumas consultas a api exigem que o `token` esteja presente no `header` da requisição, pois são restritas a usuários logados. Veja abaixo um exemplo de header com token.
+
+``` json
+header: {
+    Authorization: "Token 63c986fba4901025b7f1a0069f1636cd4"
+}
+```
+*Obs.: O token apresentado no exemplo é ficticio. Está apenas representando a estrutura final do header.*
+
+O `token` é disponibilizado nas respostas dos endpoints de login e cadastro.
+
 
 
 ## Crie um super usuário:
@@ -141,6 +173,3 @@ Dependendo das alterações feitas, é possivel que ao fazer as migrações tenh
 docker-compose down --volumes
 ```
 
-## Problemas pendentes:
-
-- Falta uma url que retorne uma lista de chats que o usuário possui

@@ -3,13 +3,12 @@ from rest_framework import serializers
 from chat.models import Message
 
 
-class UserSerializer(serializers.ModelSerializer):
-    """For Serializing User"""
-    password = serializers.CharField(write_only=True)
+class ChatWithSerializer(serializers.ModelSerializer):
+    """For Serializing Chats withs Users """
 
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'first_name', 'last_name']
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -31,3 +30,4 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = ['id', 'sender', 'receiver', 'message', 'timestamp']
         read_only_fields = ['sender']
+
