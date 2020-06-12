@@ -131,7 +131,7 @@ Algumas consultas a api exigem que o `token` esteja presente no `header` da requ
 
 ``` json
 header: {
-    Authorization: "Token 63c986fba4901025b7f1a0069f1636cd4"
+    "Authorization": "Token 63c986fba4901025b7f1a0069f1636cd4"
 }
 ```
 *Obs.: O token apresentado no exemplo é ficticio. Está apenas representando a estrutura final do header.*
