@@ -22,15 +22,14 @@ from . import views
 from chat.views import MessageViewSet
 from users.views import AuthViewSet
 
+
 router = routers.DefaultRouter()
 router.register(r'messages', MessageViewSet)
-router.register('api/auth', AuthViewSet, basename='auth')
-
+router.register(r'auth', AuthViewSet, basename='auth')
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('hello_world', views.HelloWorld.as_view()),
-    path('api-auth/', include('rest_framework.urls')),
 ]

@@ -28,7 +28,7 @@ SECRET_KEY = '*tqjm@#*=5q^+)p580x+_&6pgub&2_p#_hg=(wy&#_o1+==#cy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -134,21 +134,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# CSRF_COOKIE_SECURE = False
-# # CSRF_COOKIE_DOMAIN = None
-# CORS_ORIGIN_ALLOW_ALL = True
-# CSRF_COOKIE_HTTPONLY = False
-
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         # 'rest_framework.authentication.BasicAuthentication',
-#         'rest_framework.authentication.TokenAuthentication',
-#     ]
-# }
+CSRF_COOKIE_SECURE = False
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     )
