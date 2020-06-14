@@ -1,5 +1,5 @@
 from .utils import get_and_authenticate_user, create_user_account
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 # users/views.py
@@ -78,3 +78,8 @@ class UsersViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated, ]
     serializer_class = serializers.ListUsersSerializer
     queryset = User.objects.all()
+
+    def retrieve(self, request, pk=None):
+        queryset = User.objects.get(username=pk)
+        data = serializers.ListUsersSerializer(queryset).data
+        return Response(data=data, status=status.HTTP_200_OK)

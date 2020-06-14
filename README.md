@@ -82,6 +82,12 @@ http://localhost:8000/
 
 *Obs.:* É necessário passar o `token` no header da requisição.
 
+#### `/api/users/<USERNAME>`
+
+**GET** - Retorna usuário com *username* especificado.
+
+*Obs.:* É necessário passar o `token` no header da requisição.
+
 
 ### Messages
 
