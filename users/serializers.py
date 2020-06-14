@@ -10,8 +10,9 @@ User = get_user_model()
 
 
 class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=300, required=True)
+    username = serializers.CharField(max_length=40, required=True)
     password = serializers.CharField(
+        max_length=40,
         style={'input_type': 'password'},
         required=True,
         write_only=True
